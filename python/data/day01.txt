@@ -1,5 +1,0 @@
-welcome
-to
-advent
-of
-code
