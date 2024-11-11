@@ -1,4 +1,7 @@
 .gradle
 .idea
 build
-src/**/*.txt
+
+*.pyc
+*.pyo
+**/__pycache__/
