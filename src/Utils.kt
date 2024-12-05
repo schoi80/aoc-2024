@@ -3,6 +3,10 @@ import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
 
+typealias Grid = List<String>
+
+fun Grid.get(r: Int, c:Int) = runCatching { this[r][c] }
+
 /**
  * Reads lines from the given input txt file.
  */
