@@ -6,26 +6,35 @@ import kotlin.io.path.readLines
 typealias Grid = MutableList<String>
 typealias RowCol = Pair<Int, Int>
 
-enum class Direction {
+enum class Dir {
     UP, DOWN, LEFT, RIGHT
 }
 
-fun Direction.rotate() = when (this) {
-    Direction.UP -> Direction.RIGHT
-    Direction.DOWN -> Direction.LEFT
-    Direction.LEFT -> Direction.UP
-    Direction.RIGHT -> Direction.DOWN
+fun Dir.rotate() = when (this) {
+    Dir.UP -> Dir.RIGHT
+    Dir.DOWN -> Dir.LEFT
+    Dir.LEFT -> Dir.UP
+    Dir.RIGHT -> Dir.DOWN
 }
 
-fun RowCol.nextPos(d: Direction) = when (d) {
-    Direction.UP -> first - 1 to second
-    Direction.DOWN -> first + 1 to second
-    Direction.LEFT -> first to second - 1
-    Direction.RIGHT -> first to second + 1
+fun RowCol.next(d: Dir) = when (d) {
+    Dir.UP -> first - 1 to second
+    Dir.DOWN -> first + 1 to second
+    Dir.LEFT -> first to second - 1
+    Dir.RIGHT -> first to second + 1
 }
 
+fun Grid.rows() = this.size
+fun Grid.cols() = this[0].length
+
+fun Grid.getOrNull(rc: RowCol) = get(rc.first, rc.second).getOrNull()
 fun Grid.get(rc: RowCol) = get(rc.first, rc.second)
 fun Grid.get(r: Int, c: Int) = runCatching { this[r][c] }
+
+fun Grid.int(rc: RowCol) = int(rc.first, rc.second)
+fun Grid.int(r: Int, c: Int) = runCatching { this[r][c].digitToInt() }
+fun Grid.long(rc: RowCol) = long(rc.first, rc.second)
+fun Grid.long(r: Int, c: Int) = runCatching { this[r][c].digitToInt().toLong() }
 
 fun Grid.set(rc: RowCol, v: Char) = set(rc.first, rc.second, v)
 fun Grid.set(r: Int, c: Int, v: Char) {
@@ -38,6 +47,8 @@ fun Grid.isInbound(rc: RowCol): Boolean {
     val colCount = this[0].length - 1
     return rc.first in 0..rowCount && rc.second in 0..colCount
 }
+
+fun Grid.print() = this.forEach { it.split("").joinToString(" ").println() }
 
 /**
  * Reads lines from the given input txt file.

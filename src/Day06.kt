@@ -1,22 +1,22 @@
 fun main() {
 
-    fun Grid.getCurrLocation(): Pair<RowCol, Direction> {
+    fun Grid.getCurrLocation(): Pair<RowCol, Dir> {
         val charSet = setOf('#', '.', 'X')
         this.indices.forEach { r ->
             this[r].indices.forEach { c ->
                 if (!charSet.contains(this.get(r, c).getOrThrow()))
-                    return RowCol(r, c) to Direction.UP
+                    return RowCol(r, c) to Dir.UP
             }
         }
         error("not possible")
     }
 
-    fun getVisited(input: Grid): Set<Pair<RowCol, Direction>> {
+    fun getVisited(input: Grid): Set<Pair<RowCol, Dir>> {
         var (curr, d) = input.getCurrLocation()
-        val visited = mutableSetOf<Pair<RowCol, Direction>>()
+        val visited = mutableSetOf<Pair<RowCol, Dir>>()
         while (input.get(curr).isSuccess) {
             visited.add(curr to d)
-            val next = curr.nextPos(d)
+            val next = curr.next(d)
             if (input.get(next).isFailure) break
             else if (input.get(next).getOrThrow() == '#')
                 d = d.rotate()
@@ -29,15 +29,15 @@ fun main() {
         return getVisited(input).map { it.first }.distinct().size
     }
 
-    fun Grid.containsCycle(start: RowCol, direction: Direction): Boolean {
+    fun Grid.containsCycle(start: RowCol, direction: Dir): Boolean {
         var curr = start
         var d = direction
-        val visited = mutableSetOf<Pair<RowCol, Direction>>()
+        val visited = mutableSetOf<Pair<RowCol, Dir>>()
         while (this.get(curr).isSuccess) {
             if (visited.contains(curr to d))
                 return true
             visited.add(curr to d)
-            val next = curr.nextPos(d)
+            val next = curr.next(d)
             if (this.get(next).isFailure) break
             else if (this.get(next).getOrThrow() == '#')
                 d = d.rotate()
