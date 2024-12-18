@@ -17,6 +17,15 @@ fun Dir.rotate() = when (this) {
     Dir.RIGHT -> Dir.DOWN
 }
 
+fun Dir.clockwise() = rotate()
+fun Dir.counterClockwise() = when (this) {
+    Dir.UP -> Dir.LEFT
+    Dir.DOWN -> Dir.RIGHT
+    Dir.LEFT -> Dir.DOWN
+    Dir.RIGHT -> Dir.UP
+}
+
+
 fun RowCol.next(d: Dir) = when (d) {
     Dir.UP -> first - 1 to second
     Dir.DOWN -> first + 1 to second
@@ -46,6 +55,23 @@ fun Grid.isInbound(rc: RowCol): Boolean {
     val rowCount = this.size - 1
     val colCount = this[0].length - 1
     return rc.first in 0..rowCount && rc.second in 0..colCount
+}
+
+fun Grid.sequence() = sequence {
+    (0 until rows()).forEach { r ->
+        (0 until cols()).forEach { c ->
+            yield(r to c)
+        }
+    }
+}
+
+fun Grid.swap(x: RowCol, y:RowCol) {
+    val xv = getOrNull(x)
+    val yv = getOrNull(y)
+    if (xv != null && yv != null) {
+        set(x, yv)
+        set(y, xv)
+    }
 }
 
 fun Grid.print() = this.forEach { it.split("").joinToString(" ").println() }
